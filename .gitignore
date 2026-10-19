@@ -30,3 +30,9 @@ tmp/
 coverage/
 .vscode/
 .idea/
+
+# Cloudflare local credentials and generated runtime state
+.dev.vars
+.dev.vars.*
+.wrangler/
+.worker-dist/
