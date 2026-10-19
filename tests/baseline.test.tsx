@@ -10,7 +10,7 @@ describe("v0.1 baseline", () => {
     render(<ServiceList services={getMockServices(new Date("2026-10-19T12:00:00Z"))} />);
     expect(screen.getByText("Checkout API")).toBeTruthy();
     expect(screen.getByText("503")).toBeTruthy();
-    expect(screen.getByText("Unavailable")).toBeTruthy();
+    expect(screen.getByText("Down")).toBeTruthy();
     expect(screen.getAllByRole("row")).toHaveLength(7);
   });
   it("exposes load failures accessibly with a retry action", () => {

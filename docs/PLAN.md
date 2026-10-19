@@ -5,7 +5,7 @@ Architecture: preserve React/Vite and add a same-origin Worker API, a fixed HTTP
 
 ## Progress
 - [x] A: Audit Git, source, public production and deployment setup; establish baseline tests/build; create operational docs; commit.
-- [ ] B: Write failing tests for classification, timeout, unsafe destinations, concurrency, partial failures and API routing/cache; implement Worker and shared contract; verify; commit.
+- [x] B: Write failing tests for classification, timeout, unsafe destinations, concurrency, partial failures and API routing/cache; implement Worker and shared contract; verify; commit.
 - [ ] C: Write failing integration tests for live loading/error/partial states; connect and validate API data; retain UI/theme; isolate local demo; verify; commit.
 - [ ] D: Add lint/format/type checks, security/limits tests and docs; review dependencies and diffs; verify; commit.
 - [ ] E: Audit existing Git deployment, add validation-only Actions, dry-run Worker packaging, publish through existing connection, verify production; commit.
@@ -34,3 +34,5 @@ Architecture: preserve React/Vite and add a same-origin Worker API, a fixed HTTP
 Prevent URL/query/header injection and redirects; treat blocked checks as unknown, never falsely healthy; bound fetch time/body/multiplicity; reject malformed or oversized API data; avoid stale request races and false uptime claims; verify actual deploy rather than equating push with deployment. Account settings must be inspected before overwriting production configuration.
 
 A verification: baseline build passed; baseline component tests added. Cloudflare dashboard requires sign-in; external authorization requested while implementation continues. Work isolated on feat/live-monitoring-v1.
+
+B verification: 27 tests pass (including classification, five-second abort, exact allowlist, two-request concurrency, partial failures, cache TTL/coalescing and route validation). Frontend and Worker TypeScript checks and production build pass. Cloudflare sign-in completed; existing build commands and zero bindings inspected.

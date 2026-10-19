@@ -43,7 +43,7 @@ export function getMockServices(now = new Date()): Service[] {
       name: "Checkout API",
       url: "https://checkout.example.com/health",
       category: "API",
-      status: "unavailable",
+      status: "down",
       httpCode: 503,
       responseTime: 1240,
     },

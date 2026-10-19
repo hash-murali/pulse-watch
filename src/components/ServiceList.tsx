@@ -1,3 +1,4 @@
+import { STATUS_LABELS } from "../types";
 import type { Service } from "../types";
 import { Icon } from "./Icon";
 export function ServiceList({ services }: { services: Service[] }) {
@@ -34,9 +35,7 @@ export function ServiceList({ services }: { services: Service[] }) {
               <td>
                 <span className={`status-badge ${service.status}`}>
                   <span className="small-dot" />
-                  {service.status === "operational"
-                    ? "Operational"
-                    : "Unavailable"}
+                  {STATUS_LABELS[service.status]}
                 </span>
               </td>
               <td>
