@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { getMockServices } from "./data/mockServices";
+import { useStatus } from "./hooks/useStatus";
 import { Icon } from "./components/Icon";
 import { OverviewCard } from "./components/OverviewCard";
 import { ServiceList } from "./components/ServiceList";
 import { StatePanel } from "./components/StatePanel";
-import type { DashboardState, DemoState } from "./types";
+import type { DemoState } from "./types";
 function initialTheme(): "dark" | "light" {
   try {
     const saved = localStorage.getItem("pulsewatch-theme");
@@ -19,8 +19,7 @@ function initialTheme(): "dark" | "light" {
 export default function App() {
   const [theme, setTheme] = useState(initialTheme);
   const [demo, setDemo] = useState<DemoState>("ready");
-  const [state, setState] = useState<DashboardState>({ kind: "loading" });
-  const [revision, setRevision] = useState(0);
+  const {state, isDemo, remaining, refresh} = useStatus(demo);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
   useEffect(() => {
@@ -31,30 +30,12 @@ export default function App() {
       /* Theme still works in memory. */
     }
   }, [theme]);
-  useEffect(() => {
-    setState({ kind: "loading" });
-    if (demo === "loading") return;
-    const timer = window.setTimeout(
-      () =>
-        setState(
-          demo === "error"
-            ? {
-                kind: "error",
-                message:
-                  "This is a simulated connection error. Retry to reload the mock services.",
-              }
-            : {
-                kind: "ready",
-                services: demo === "empty" ? [] : getMockServices(),
-              },
-        ),
-      650,
-    );
-    return () => window.clearTimeout(timer);
-  }, [demo, revision]);
   const services = state.kind === "ready" ? state.services : [];
   const operational = services.filter((s) => s.status === "operational").length;
-  const unavailable = services.length - operational;
+  const unavailable = services.filter(s => s.status === "down").length;
+  const uncertain = services.filter(s => s.status === "unknown").length;
+  const degraded = services.filter(s => s.status === "degraded").length;
+  const needsAttention = unavailable + uncertain + degraded;
   const visible = services.filter(
     (s) =>
       `${s.name} ${s.url}`.toLowerCase().includes(query.toLowerCase()) &&
@@ -62,16 +43,17 @@ export default function App() {
   );
   const retry = () => {
     setDemo("ready");
-    setRevision((r) => r + 1);
+    refresh();
   };
   return (
     <div className="app-shell">
+      <a className="skip-link" href="#overview">Skip to dashboard</a>
       <aside className="sidebar">
         <a className="brand" href="#overview">
           <span className="brand-mark">
             <Icon name="pulse" />
           </span>
-          PulseWatch<span className="version">v0.1</span>
+          PulseWatch<span className="version">v1</span>
         </a>
         <div className="workspace-label">WORKSPACE</div>
         <a className="nav-item active" href="#overview">
@@ -82,14 +64,14 @@ export default function App() {
         <div className="sidebar-bottom">
           <div className="demo-note">
             <span className="small-dot" />
-            Demo workspace
+            {isDemo ? "Demo workspace" : "Public dashboard"}
             <p>
               A little peace of mind.
               <br />
               One service at a time.
             </p>
           </div>
-          <span className="sidebar-caption">PulseWatch / v0.1.0</span>
+          <span className="sidebar-caption">PulseWatch / v1.0.0</span>
         </div>
       </aside>
       <div className="main-shell">
@@ -105,7 +87,7 @@ export default function App() {
             <Icon name={theme === "dark" ? "sun" : "moon"} />
           </button>
         </header>
-        <main id="overview">
+        <main id="overview" tabIndex={-1}>
           <div className="page-heading">
             <div>
               <div className="eyebrow">YOUR SYSTEMS, AT A GLANCE</div>
@@ -116,36 +98,31 @@ export default function App() {
             </div>
             <button
               className="button refresh-button"
-              onClick={() => setRevision((r) => r + 1)}
-              disabled={state.kind === "loading"}
+              onClick={refresh}
+              disabled={state.kind === "loading" || remaining > 0}
             >
               <Icon
                 name="refresh"
                 className={state.kind === "loading" ? "spin" : ""}
               />
-              Refresh status
+              {remaining > 0 ? `Refresh in ${remaining}s` : "Refresh status"}
             </button>
           </div>
           <div className="mock-banner">
-            <span>
-              <span className="mock-tag">MOCK DATA</span> You’re exploring a
-              preview. No live endpoints are being monitored.
-            </span>
-            <span className="preview-label">
-              v0.1.0 preview <Icon name="arrow" />
-            </span>
+            <span><span className="mock-tag">{isDemo ? "MOCK DATA" : "LIVE CHECKS"}</span>{isDemo ? " Local development fixtures. No live endpoints are being checked." : " Point-in-time HTTPS observations. Not historical uptime monitoring."}</span>
+            <span className="preview-label">{isDemo ? "Development demo" : "Cached for up to 60s"}</span>
           </div>
           <section className="overview-grid" aria-label="Service summary">
             <OverviewCard
               label="Total services"
               value={state.kind === "ready" ? services.length : null}
-              detail="In your workspace"
+              detail="Fixed public HTTPS endpoints"
               icon="globe"
             />
             <OverviewCard
               label="Operational"
               value={state.kind === "ready" ? operational : null}
-              detail="Running as expected"
+              detail="Successful, timely responses"
               icon="check"
               tone="healthy"
             />
@@ -153,40 +130,40 @@ export default function App() {
               label="Unavailable"
               value={state.kind === "ready" ? unavailable : null}
               detail={
-                unavailable ? "Needs your attention" : "No unavailable services"
+                unavailable ? "Needs your attention" : "No services observed down"
               }
               icon="alert"
               tone="unhealthy"
             />
           </section>
           <div
-            className={`health-banner ${unavailable ? "attention" : ""}`}
+            className={`health-banner ${needsAttention ? "attention" : ""}`}
             role="status"
           >
-            <Icon name={unavailable ? "alert" : "pulse"} />
+            <Icon name={needsAttention ? "alert" : "pulse"} />
             <div>
               <strong>
                 {state.kind !== "ready"
                   ? "Service status pending"
                   : !services.length
                     ? "No services configured"
-                    : unavailable
-                      ? `${unavailable} service needs attention`
+                    : needsAttention
+                      ? `${needsAttention} service${needsAttention === 1 ? "" : "s"} need${needsAttention === 1 ? "s" : ""} attention`
                       : "All services are operational"}
               </strong>
               <span>
                 {state.kind !== "ready"
-                  ? "Waiting for the simulated service data."
-                  : "Status reflects mock data from the latest simulated check."}
+                  ? state.kind === "error" ? "Unable to obtain a valid observation." : "Waiting for service observations."
+                  : `${unavailable} down · ${degraded} degraded · ${uncertain} unknown${isDemo ? " · simulated" : ""}`}
               </span>
             </div>
             <span className="health-label">
               {state.kind === "ready" && services.length > 0
                 ? `${operational} of ${services.length} operational`
-                : "DEMO"}
+                : isDemo ? "DEMO" : "LIVE"}
             </span>
           </div>
-          <section className="services-panel" aria-labelledby="services-title">
+          <section className="services-panel" aria-labelledby="services-title" aria-busy={state.kind === "loading"}>
             <div className="panel-heading">
               <div>
                 <h2 id="services-title">
@@ -199,7 +176,7 @@ export default function App() {
               </div>
               <span className="check-note">
                 <span className="small-dot" />
-                Manual mock checks
+                {isDemo ? "Manual mock checks" : "Manual refresh · no polling"}
               </span>
             </div>
             <div className="toolbar">
@@ -219,7 +196,9 @@ export default function App() {
               >
                 <option value="all">All statuses</option>
                 <option value="operational">Operational</option>
-                <option value="unavailable">Unavailable</option>
+                <option value="down">Down</option>
+                <option value="degraded">Degraded</option>
+                <option value="unknown">Unknown</option>
               </select>
             </div>
             {state.kind === "loading" ? (
@@ -248,10 +227,10 @@ export default function App() {
                   ? `Showing ${visible.length} of ${services.length} services`
                   : "Service data pending"}
               </span>
-              <span>All times in your local timezone</span>
+              <span>{state.kind === "ready" && state.checkedAt ? <>Snapshot: <time dateTime={state.checkedAt}>{new Date(state.checkedAt).toLocaleString()}</time> · local time</> : "All times in your local timezone"}</span>
             </div>
           </section>
-          <div className="demo-controls">
+          {isDemo && <div className="demo-controls">
             <label htmlFor="demo-state">Preview state</label>
             <select
               id="demo-state"
@@ -264,14 +243,14 @@ export default function App() {
               <option value="error">Connection error</option>
             </select>
             <span>Explore the UI with simulated states.</span>
-          </div>
+          </div>}
           <footer>
             <span>
               <Icon name="pulse" />
               Built for a little more peace of mind.
             </span>
             <span>
-              PulseWatch <span className="footer-dot">·</span> v0.1.0
+              PulseWatch <span className="footer-dot">·</span> v1.0.0
             </span>
           </footer>
         </main>

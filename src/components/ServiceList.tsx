@@ -5,6 +5,7 @@ export function ServiceList({ services }: { services: Service[] }) {
   return (
     <div className="table-scroll">
       <table>
+        <caption className="sr-only">Point-in-time service health observations</caption>
         <thead>
           <tr>
             <th scope="col">Service</th>
@@ -37,6 +38,7 @@ export function ServiceList({ services }: { services: Service[] }) {
                   <span className="small-dot" />
                   {STATUS_LABELS[service.status]}
                 </span>
+                {service.error && <span className="check-error">{service.error === "TIMEOUT" ? "Check timed out" : service.error === "UNREACHABLE" ? "Could not connect" : service.error === "HTTP_ERROR" ? "HTTP error observed" : service.error === "REDIRECT_NOT_FOLLOWED" ? "Redirect not followed" : "Check unavailable"}</span>}
               </td>
               <td>
                 <code

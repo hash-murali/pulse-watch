@@ -35,8 +35,8 @@ export function StatePanel({
       <p>
         {message ??
           (kind === "loading"
-            ? "Loading simulated status data…"
-            : "Try a different search or switch back to the populated demo.")}
+            ? "Loading service observations…"
+            : "No endpoints are available. Try a different search or refresh the dashboard.")}
       </p>
       {onRetry && (
         <button className="button" onClick={onRetry}>

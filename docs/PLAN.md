@@ -6,7 +6,7 @@ Architecture: preserve React/Vite and add a same-origin Worker API, a fixed HTTP
 ## Progress
 - [x] A: Audit Git, source, public production and deployment setup; establish baseline tests/build; create operational docs; commit.
 - [x] B: Write failing tests for classification, timeout, unsafe destinations, concurrency, partial failures and API routing/cache; implement Worker and shared contract; verify; commit.
-- [ ] C: Write failing integration tests for live loading/error/partial states; connect and validate API data; retain UI/theme; isolate local demo; verify; commit.
+- [x] C: Write failing integration tests for live loading/error/partial states; connect and validate API data; retain UI/theme; isolate local demo; verify; commit.
 - [ ] D: Add lint/format/type checks, security/limits tests and docs; review dependencies and diffs; verify; commit.
 - [ ] E: Audit existing Git deployment, add validation-only Actions, dry-run Worker packaging, publish through existing connection, verify production; commit.
 - [ ] F: Final documentation and API guide; clean-install/full checks; desktop/mobile production verification; tag v1.0.0 only after all acceptance gates pass.
@@ -36,3 +36,5 @@ Prevent URL/query/header injection and redirects; treat blocked checks as unknow
 A verification: baseline build passed; baseline component tests added. Cloudflare dashboard requires sign-in; external authorization requested while implementation continues. Work isolated on feat/live-monitoring-v1.
 
 B verification: 27 tests pass (including classification, five-second abort, exact allowlist, two-request concurrency, partial failures, cache TTL/coalescing and route validation). Frontend and Worker TypeScript checks and production build pass. Cloudflare sign-in completed; existing build commands and zero bindings inspected.
+
+C verification: 40 tests pass; strict frontend/Worker types and build pass. Live same-origin client validates shape, sizes and values. API timeout 15 seconds; UI cooldown 60 seconds and no network polling. Demo flag is development-only; dark/light/search/filter UI preserved. Cloudflare Workers Free plan confirmed in authenticated dashboard.
