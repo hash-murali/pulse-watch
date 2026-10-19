@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run typecheck && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit && tsc -p tsconfig.worker.json --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.worker.json --noEmit && tsc -p tsconfig.tests.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
@@ -15,7 +15,10 @@
     "dev:worker": "wrangler dev --local --port 8787",
     "deploy:check": "wrangler deploy --dry-run --outdir .worker-dist",
     "deploy": "wrangler deploy",
-    "dev:demo": "VITE_DEMO_MODE=true vite"
+    "dev:demo": "VITE_DEMO_MODE=true vite",
+    "lint": "eslint . --max-warnings 0",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -24,10 +27,9 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261019.1",
     "@eslint/js": "^10.0.1",
-    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
-    "@types/node": "^26.6.5",
+    "@types/node": "^24.19.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.1.0",

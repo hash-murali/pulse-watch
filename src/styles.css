@@ -870,9 +870,43 @@ footer svg {
   }
 }
 
-.status-badge.degraded {color:#b58b2f;background:color-mix(in srgb,#b58b2f 12%,transparent)}
-.status-badge.unknown {color:var(--muted);background:var(--raised)}
-.check-error {display:block;font-size:10px;color:var(--muted);margin-top:6px;white-space:normal;max-width:160px}
-.sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.skip-link {position:fixed;top:-100px;left:15px;z-index:10;background:var(--panel);padding:12px;border:2px solid var(--accent);border-radius:6px}
-.skip-link:focus {top:15px}
+.status-badge.degraded {
+  color: #b58b2f;
+  background: color-mix(in srgb, #b58b2f 12%, transparent);
+}
+.status-badge.unknown {
+  color: var(--muted);
+  background: var(--raised);
+}
+.check-error {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  white-space: normal;
+  max-width: 160px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 15px;
+  z-index: 10;
+  background: var(--panel);
+  padding: 12px;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+}
+.skip-link:focus {
+  top: 15px;
+}

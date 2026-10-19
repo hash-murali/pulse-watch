@@ -1,5 +1,12 @@
 export type ServiceStatus = "operational" | "degraded" | "down" | "unknown";
-export type CheckError = "TIMEOUT" | "UNREACHABLE" | "INVALID_TARGET" | "INVALID_RESPONSE" | "REDIRECT_NOT_FOLLOWED" | "HTTP_ERROR" | null;
+export type CheckError =
+  | "TIMEOUT"
+  | "UNREACHABLE"
+  | "INVALID_TARGET"
+  | "INVALID_RESPONSE"
+  | "REDIRECT_NOT_FOLLOWED"
+  | "HTTP_ERROR"
+  | null;
 export interface Service {
   id: string;
   name: string;
@@ -22,4 +29,9 @@ export type DashboardState =
   | { kind: "loading" }
   | { kind: "error"; message: string }
   | { kind: "ready"; services: Service[]; checkedAt?: string };
-export const STATUS_LABELS: Record<ServiceStatus, string> = { operational: "Operational", degraded: "Degraded", down: "Down", unknown: "Unknown" };
+export const STATUS_LABELS: Record<ServiceStatus, string> = {
+  operational: "Operational",
+  degraded: "Degraded",
+  down: "Down",
+  unknown: "Unknown",
+};

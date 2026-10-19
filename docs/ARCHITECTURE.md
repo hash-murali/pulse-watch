@@ -9,7 +9,8 @@ The API describes a point-in-time HTTP observation from a Cloudflare location, n
 Detailed contract and operational constraints will be documented with the implementation.
 
 ## Worker implementation
-`worker/targets.ts` fixes three operator-reviewed destinations (Cloudflare robots.txt, GitHub status page, Wikipedia robots.txt). HEAD only, no redirects, no visitor headers, no body parsing. Exact URL/id membership prevents private-IP, alternate-port, credential, and arbitrary-host injection. Public hostnames are trusted provider-managed DNS; this is not a general-purpose SSRF-safe fetch proxy. Never add user-controlled DNS or URL configuration.
+
+`worker/targets.ts` fixes three operator-reviewed destinations (Cloudflare robots.txt, GitHub status page, Wikipedia homepage). HEAD only, no redirects, no visitor headers, no body parsing. Exact URL/id membership prevents private-IP, alternate-port, credential, and arbitrary-host injection. Public hostnames are trusted provider-managed DNS; this is not a general-purpose SSRF-safe fetch proxy. Never add user-controlled DNS or URL configuration.
 
 2xx under 1500ms is operational; slower 2xx and all 3xx are degraded; 4xx is unknown (including blocked/rate-limited requests); 5xx, transport failures and timeouts are down. A service can fail while the API itself succeeds. Raw exception messages, response bodies and upstream headers are never returned.
 

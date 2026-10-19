@@ -19,7 +19,7 @@ function initialTheme(): "dark" | "light" {
 export default function App() {
   const [theme, setTheme] = useState(initialTheme);
   const [demo, setDemo] = useState<DemoState>("ready");
-  const {state, isDemo, remaining, refresh} = useStatus(demo);
+  const { state, isDemo, remaining, refresh } = useStatus(demo);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
   useEffect(() => {
@@ -32,9 +32,9 @@ export default function App() {
   }, [theme]);
   const services = state.kind === "ready" ? state.services : [];
   const operational = services.filter((s) => s.status === "operational").length;
-  const unavailable = services.filter(s => s.status === "down").length;
-  const uncertain = services.filter(s => s.status === "unknown").length;
-  const degraded = services.filter(s => s.status === "degraded").length;
+  const unavailable = services.filter((s) => s.status === "down").length;
+  const uncertain = services.filter((s) => s.status === "unknown").length;
+  const degraded = services.filter((s) => s.status === "degraded").length;
   const needsAttention = unavailable + uncertain + degraded;
   const visible = services.filter(
     (s) =>
@@ -47,7 +47,9 @@ export default function App() {
   };
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#overview">Skip to dashboard</a>
+      <a className="skip-link" href="#overview">
+        Skip to dashboard
+      </a>
       <aside className="sidebar">
         <a className="brand" href="#overview">
           <span className="brand-mark">
@@ -109,8 +111,17 @@ export default function App() {
             </button>
           </div>
           <div className="mock-banner">
-            <span><span className="mock-tag">{isDemo ? "MOCK DATA" : "LIVE CHECKS"}</span>{isDemo ? " Local development fixtures. No live endpoints are being checked." : " Point-in-time HTTPS observations. Not historical uptime monitoring."}</span>
-            <span className="preview-label">{isDemo ? "Development demo" : "Cached for up to 60s"}</span>
+            <span>
+              <span className="mock-tag">
+                {isDemo ? "MOCK DATA" : "LIVE CHECKS"}
+              </span>
+              {isDemo
+                ? " Local development fixtures. No live endpoints are being checked."
+                : " Point-in-time HTTPS observations. Not historical uptime monitoring."}
+            </span>
+            <span className="preview-label">
+              {isDemo ? "Development demo" : "Cached for up to 60s"}
+            </span>
           </div>
           <section className="overview-grid" aria-label="Service summary">
             <OverviewCard
@@ -130,7 +141,9 @@ export default function App() {
               label="Unavailable"
               value={state.kind === "ready" ? unavailable : null}
               detail={
-                unavailable ? "Needs your attention" : "No services observed down"
+                unavailable
+                  ? "Needs your attention"
+                  : "No services observed down"
               }
               icon="alert"
               tone="unhealthy"
@@ -153,17 +166,25 @@ export default function App() {
               </strong>
               <span>
                 {state.kind !== "ready"
-                  ? state.kind === "error" ? "Unable to obtain a valid observation." : "Waiting for service observations."
+                  ? state.kind === "error"
+                    ? "Unable to obtain a valid observation."
+                    : "Waiting for service observations."
                   : `${unavailable} down · ${degraded} degraded · ${uncertain} unknown${isDemo ? " · simulated" : ""}`}
               </span>
             </div>
             <span className="health-label">
               {state.kind === "ready" && services.length > 0
                 ? `${operational} of ${services.length} operational`
-                : isDemo ? "DEMO" : "LIVE"}
+                : isDemo
+                  ? "DEMO"
+                  : "LIVE"}
             </span>
           </div>
-          <section className="services-panel" aria-labelledby="services-title" aria-busy={state.kind === "loading"}>
+          <section
+            className="services-panel"
+            aria-labelledby="services-title"
+            aria-busy={state.kind === "loading"}
+          >
             <div className="panel-heading">
               <div>
                 <h2 id="services-title">
@@ -227,23 +248,37 @@ export default function App() {
                   ? `Showing ${visible.length} of ${services.length} services`
                   : "Service data pending"}
               </span>
-              <span>{state.kind === "ready" && state.checkedAt ? <>Snapshot: <time dateTime={state.checkedAt}>{new Date(state.checkedAt).toLocaleString()}</time> · local time</> : "All times in your local timezone"}</span>
+              <span>
+                {state.kind === "ready" && state.checkedAt ? (
+                  <>
+                    Snapshot:{" "}
+                    <time dateTime={state.checkedAt}>
+                      {new Date(state.checkedAt).toLocaleString()}
+                    </time>{" "}
+                    · local time
+                  </>
+                ) : (
+                  "All times in your local timezone"
+                )}
+              </span>
             </div>
           </section>
-          {isDemo && <div className="demo-controls">
-            <label htmlFor="demo-state">Preview state</label>
-            <select
-              id="demo-state"
-              value={demo}
-              onChange={(e) => setDemo(e.target.value as DemoState)}
-            >
-              <option value="ready">Populated dashboard</option>
-              <option value="loading">Loading</option>
-              <option value="empty">Empty workspace</option>
-              <option value="error">Connection error</option>
-            </select>
-            <span>Explore the UI with simulated states.</span>
-          </div>}
+          {isDemo && (
+            <div className="demo-controls">
+              <label htmlFor="demo-state">Preview state</label>
+              <select
+                id="demo-state"
+                value={demo}
+                onChange={(e) => setDemo(e.target.value as DemoState)}
+              >
+                <option value="ready">Populated dashboard</option>
+                <option value="loading">Loading</option>
+                <option value="empty">Empty workspace</option>
+                <option value="error">Connection error</option>
+              </select>
+              <span>Explore the UI with simulated states.</span>
+            </div>
+          )}
           <footer>
             <span>
               <Icon name="pulse" />
