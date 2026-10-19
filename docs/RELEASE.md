@@ -9,8 +9,8 @@ Do not create the v1.0.0 tag until every required gate is complete.
 - [x] Test frontend loading/error/partial results, filtering and theme; monitor classification, timeouts, invalid/unsafe targets and responses; API method/query boundaries, caching and partial failures.
 - [x] Pass formatting, zero-warning lint, strict frontend/Worker/test type checks and production build.
 - [x] Verify local workerd full-stack routing, API/asset smoke checks and Wrangler packaging dry run.
-- [ ] Complete independent code review and resolve material findings.
-- [ ] Verify clean npm install and all gates on Node 24.
+- [x] Complete independent code review and resolve material findings.
+- [x] Verify clean npm install and all gates on Node 24.
 - [ ] Validate GitHub Actions on the exact release source.
 - [ ] Deploy via existing Cloudflare Git integration only; verify production HTML/assets and JSON API.
 - [ ] Verify production desktop/mobile themes, service states and keyboard controls.
@@ -20,3 +20,5 @@ Do not create the v1.0.0 tag until every required gate is complete.
 Release notes: Live observations for three fixed public HTTPS endpoints, four-state service health, bounded server checks and cached snapshots, responsive accessible UI, development-only mock mode, automated QA and validation-only CI. No authentication, database, scheduled monitoring, historical uptime, paid services or custom-domain purchases.
 
 Verification evidence will be recorded below when the production gates complete. A public app does not become a stable release merely because the build passes.
+
+Pre-deploy evidence: independent read-only review found no material issues; clean install on Node v24.22.0 passed all 42 tests, formatting, zero-warning lint, all TypeScript projects, Vite production build and Wrangler dry run. Public GitHub repository visibility verified.
