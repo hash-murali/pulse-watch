@@ -15,3 +15,9 @@ Detailed contract and operational constraints will be documented with the implem
 2xx under 1500ms is operational; slower 2xx and all 3xx are degraded; 4xx is unknown (including blocked/rate-limited requests); 5xx, transport failures and timeouts are down. A service can fail while the API itself succeeds. Raw exception messages, response bodies and upstream headers are never returned.
 
 A warm isolate coalesces requests and retains snapshots for 60 seconds; the Cloudflare Cache API shares them within a location where available. Neither mechanism is a global rate limit. No paid rate-limit binding or storage is used. API browser caching is disabled so timestamps are explicit; manual refresh can receive an existing snapshot. HEAD observes headers only, not page rendering or application correctness.
+
+## PulsePlay discovery
+
+`src/Root.tsx` lazy-loads the discovery app at `/explore`; `/` keeps the monitor. Shared validated contracts live in `src/discover/model.ts`, bounded streaming JSON in `transport.ts`, frontend requests in `client.ts`, and provider/cache logic in `worker/discovery.ts`. The Worker only fetches fixed HN Search HTTPS search endpoints, never returned story links. React renders provider strings as text. Article links are sanitized HTTPS links or fall back to HN comments. Search is submit-only; random spotlight and saved stories require no requests.
+
+No resources or dependencies were added. The public provider can be unavailable independently. Its source repository is archived; this app assumes no SLA.

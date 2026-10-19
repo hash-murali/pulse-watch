@@ -13,3 +13,9 @@
 ## 0.1.0
 
 Initial React, TypeScript and Vite dashboard with labeled mock data, service cards/table, responsive themes, search, filtering and demo states.
+
+## 1.1.0
+
+- Add PulsePlay at `/explore`: live HN discovery/search, topics, saved stories, random spotlight and animated loading.
+- Add bounded fixed-provider API, safe links, caching and burst protection without dependencies or paid infrastructure.
+- Preserve the original monitor and extend automated validation.

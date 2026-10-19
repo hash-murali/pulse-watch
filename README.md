@@ -6,7 +6,13 @@ A lightweight public website-status dashboard built to learn how to operate a re
 
 React + strict TypeScript + Vite + plain CSS, served by the existing Cloudflare Worker **pulse-watch** with static assets. This project uses **Workers, not Cloudflare Pages**.
 
-## What it does
+## PulsePlay discovery — v1.1
+
+[Open PulsePlay](https://pulse-watch.mail2murali-ks.workers.dev/explore) for a playful tech discovery feed: trending Hacker News stories, fresh finds, Show HN projects, Ask HN discussions, submitted keyword search, topic shortcuts, local bookmarks and a random story spotlight. Animated skeletons, dark/light themes and responsive cards work without new dependencies. The original monitor remains at `/`.
+
+Search phrases go to the public [HN Search API](https://hn.algolia.com/api) only when submitted. Results may include older stories; Trending without a query means the HN front page, not a global trend ranking. Saved stories stay in this browser (up to 50); clearing browser storage removes them. No account or sync.
+
+## What the monitor does
 
 - Point-in-time server-side HTTPS checks against three fixed public endpoints.
 - Operational, degraded, down, and unknown results; HTTP code, header latency, individual timestamps and safe errors.
@@ -80,4 +86,4 @@ Run validation and review the target configuration before pushing to master. Tha
 - [Deployment and rollback](docs/DEPLOYMENT.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Implementation plan](docs/PLAN.md) · [Release checklist](docs/RELEASE.md) · [Engineering guide](AGENTS.md)
 
-Only React and React DOM are runtime npm dependencies. No database, authentication, paid API, third-party fonts, analytics, cron, or secrets are required. Theme preference is the only browser-stored setting. Public API traffic can exhaust Free quotas; availability may then be limited without incurring charges. Historical monitoring remains a documented future option, not an enabled resource.
+Only React and React DOM are runtime npm dependencies. No database, authentication, paid API, third-party fonts, analytics, cron, or secrets are required. Theme preference and PulsePlay bookmarks are stored only in the browser. Public API traffic can exhaust Free quotas; availability may then be limited without incurring charges. Historical monitoring remains a documented future option, not an enabled resource.

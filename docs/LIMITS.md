@@ -17,3 +17,9 @@ Sources: [Workers pricing](https://developers.cloudflare.com/workers/platform/pr
 ## Future options (not enabled)
 
 Historical uptime needs persisted observations and a defined measurement policy. Evaluate a low-frequency scheduled Worker plus Free KV/D1 quotas and retention before proposing it; do not silently enable these resources. Alerting, custom domains and higher-frequency checks are outside v1 scope. Maintain the $0 constraint even if that means accepting limited availability.
+
+## Discovery budget and privacy
+
+PulsePlay uses the existing Free Worker, static assets and public HN Search API. No new paid resource, database, cron or API subscription. It has no polling, fetches 24 results per submitted request, caches five minutes and bounds warm-isolate bursts/concurrency. Isolates and edge caches are best-effort, so this does not guarantee a fixed global request budget or withstand unlimited public traffic. Free-plan capacity exhaustion may reduce availability; do not upgrade automatically.
+
+Submitted search text is sent to hn.algolia.com. Do not search secrets. Browser bookmarks (max 50) and theme are local only; no cloud sync or durability guarantee. Returned article links are untrusted external sites opened only by the visitor, not fetched by the Worker. HN Search may rate-limit, change or stop operating; show retry errors rather than enabling a paid fallback. Monitoring's no-body fetch rule remains unchanged; discovery reads only bounded JSON from the fixed reviewed provider.

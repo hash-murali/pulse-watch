@@ -57,3 +57,18 @@ E diagnosis: candidate 4a79e74 passed Cloudflare build but preview deploy failed
 - Production smoke checks passed: HTML and built JS, fresh JSON with three observations, JSON 404 for missing API routes and 400 for URL queries. CSP and nosniff verified. All three endpoints returned HTTP 200 during acceptance (point-in-time only).
 - Public browser QA passed at 1440×1000 desktop and 390×844 mobile: no page overflow, live table/status/timestamps, search, empty filter, persistent light/dark theme, keyboard skip link, and no console errors or warnings.
 - Final docs-only release record and changelog retain identical application source/assets. Its CI/build must pass before tagging; Git's annotated tag and remote ref are the authoritative publication record. No further paid infrastructure or scheduled jobs were enabled.
+
+# v1.1 — PulsePlay discovery
+
+Goal: add a fun, useful discovery app on the existing infrastructure at strictly $0, preserving monitoring at `/` and adding PulsePlay at `/explore`.
+
+- [x] Add tested GET `/api/discover` against the fixed public HN Search endpoint: Trending/front page, newest, Show HN, Ask HN, submitted search and bounded pagination. Validate inputs, sanitize data/links, bound JSON to 128KiB and fetch time to 6s. Cache for 5 minutes, coalesce duplicate work, cap warm cache and uncached bursts; no polling or arbitrary fetch destinations.
+- [x] Add shared strict contracts and runtime-validated frontend requests. Build playful responsive `/explore` UI, skeleton/loading animation, accessible search/tabs/topic chips, safe external links, saved stories in local storage, and random spotlight. Preserve dark/light preference and reduced motion.
+- [x] Add automated tests for API input rejection, URLs, malformed/oversized/slow upstream responses, cache reuse and burst control; frontend loading/error/empty/search/saved states and local persistence.
+- [ ] Update engineering/security/architecture/API/readme docs, run all gates and local full-stack QA, independent review, commit and publish via the existing Git connection only; verify production routes and desktop/mobile behavior.
+
+Files: `worker/discovery.ts` owns external JSON fetching and caching; `src/discover/model.ts` owns validated feed/story contracts; `src/discover/client.ts` owns bounded requests; `src/discover/Explore.tsx`, `StoryCard.tsx`, `explore.css` own the UI; `src/Root.tsx` selects app by pathname. Existing `/api/status`, monitor modules and routes remain intact. No new runtime dependencies, Worker, database, scheduled jobs or paid accounts.
+
+Provider: https://hn.algolia.com/api (public HN Search service, no API key/account required for these requests). Verified an actual front_page query before implementation. This service can rate-limit or change availability independently; show safe retry states rather than falling back to paid products. Search phrases are sent to that public search provider; saved stories remain only in the user's browser. The provider's archived source repository is not a service SLA.
+
+Local verification: 61 tests and all format/lint/type/build gates pass; Wrangler dry run binds only ASSETS. Full-stack smoke checks return three live monitor observations and 24 discovery stories. Desktop 1440×1000 and mobile 390×844 browser checks cover live search, persistent saved stories, random spotlight, light/dark themes and no horizontal overflow. Independent review found one normalized-response size mismatch; shared 128KiB limits and a large multilingual-feed regression fix it. Publication and production verification remain pending.

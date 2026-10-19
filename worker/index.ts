@@ -1,3 +1,4 @@
+import { createDiscoveryHandler } from "./discovery";
 import type { StatusResponse } from "../src/types";
 import { checkServices } from "./monitor";
 import type { HealthFetcher } from "./monitor";
@@ -20,6 +21,7 @@ export function createHandler(
   fetcher: HealthFetcher = fetch,
   cache?: SnapshotCache,
 ) {
+  const discover = createDiscoveryHandler(fetcher, cache);
   let snapshot: StatusResponse | undefined;
   let inFlight: Promise<StatusResponse> | undefined;
   async function getSnapshot(request: Request): Promise<StatusResponse> {
@@ -75,6 +77,7 @@ export function createHandler(
   }
   return async (request: Request, env: Env): Promise<Response> => {
     const url = new URL(request.url);
+    if (url.pathname === "/api/discover") return discover(request);
     if (url.pathname === "/api" || url.pathname.startsWith("/api/")) {
       if (url.pathname !== "/api/status")
         return json({ error: "API route not found" }, 404);

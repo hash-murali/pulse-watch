@@ -63,6 +63,10 @@ export default function App() {
           Overview
           <span className="nav-dot" />
         </a>
+        <a className="nav-item" href="/explore">
+          <Icon name="search" />
+          PulsePlay · Discover
+        </a>
         <div className="sidebar-bottom">
           <div className="demo-note">
             <span className="small-dot" />

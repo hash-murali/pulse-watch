@@ -43,3 +43,7 @@ See [troubleshooting](TROUBLESHOOTING.md) and [$0 limits](LIMITS.md). Cloudflare
 ## v1 acceptance deployment
 
 On 2026-10-19, production build `328529cd-d8ff-42a4-bb86-d9194a2703b7` deployed application source `01bc734` successfully via the existing Git integration. Worker version: `da7523a9-cbc4-4013-84d5-68179d562f1e`. Public smoke/browser verification passed. This is an additional known-good rollback target for subsequent releases. The final documentation-only release record produces the same app assets and follows the same validation/deployment gate.
+
+## PulsePlay v1.1 verification
+
+Deployment identity, Free plan and Git pipeline remain unchanged. Verify `/explore` serves HTML, `/api/discover` returns version-1 JSON with at most 24 stories, a submitted search works, saved stories persist across reload, and dark/light mobile layouts have no overflow. Recheck `/` and `/api/status` to protect the original monitor. `npm run smoke` covers both apps. Roll back the complete Worker version through the existing procedure if discovery causes production failures; do not create another deployment pipeline.

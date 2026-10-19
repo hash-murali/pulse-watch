@@ -11,3 +11,7 @@
 - **Rollback required:** see [DEPLOYMENT.md](DEPLOYMENT.md). Prefer the prior successful Worker version for immediate recovery; use a source revert for lasting recovery.
 
 Run `npm run check`, `npm run deploy:check`, then `npm run smoke` for routine verification. Automated tests stub network boundaries and never contact providers. Smoke tests make one status request plus a few asset/routing checks; do not schedule them at high frequency.
+
+## PulsePlay
+
+A short-break message means the warm Worker reached its uncached burst limit; wait a minute or use saved stories. Provider errors may mean HN Search is unavailable, too slow or returned invalid data. Retry later; the monitor remains independent. Search includes historical HN posts and is not general web search. If bookmarks disappear, check browser storage/private mode; no server copy exists. Rebuild before testing frontend changes through `dev:worker`.

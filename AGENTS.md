@@ -19,3 +19,7 @@ Never print or commit credentials, personal data, `.env`, `.dev.vars`, Wrangler 
 ## Workflow
 
 Read docs/PLAN.md, docs/ARCHITECTURE.md, and docs/DEPLOYMENT.md. Update progress and operational docs with coherent milestone commits. Use existing Cloudflare Git deployment as the only automatic publisher; GitHub Actions validates only. Before a production push, run all checks and review the staged diff and target Worker. Validate production HTML, assets, API JSON, and desktop/mobile UI after deployment. Record blockers honestly. Never tag v1.0.0 until docs/RELEASE.md acceptance checks all pass. No blanket assumption that a Git push deployed successfully.
+
+## PulsePlay discovery scope
+
+The user authorized a playful discovery app alongside monitoring. `/api/discover` may read bounded public JSON only from the fixed `https://hn.algolia.com/api/v1/` search endpoints; URL query construction must never permit arbitrary origins or fetch returned story links. This is a scoped exception to monitoring's HEAD/no-response-body rule. Treat provider strings as untrusted text, sanitize external links, bound JSON/time/pagination/cache/concurrency and burst requests. No third-party API account, SDK, paid tier, storage binding or scheduled polling. Bookmarks are browser-local and search terms are sent to HN Search; make those facts visible. Preserve `/api/status` security limits.

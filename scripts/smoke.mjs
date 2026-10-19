@@ -44,4 +44,19 @@ if (
 const rejected = await get("/api/status?url=http://127.0.0.1");
 if (rejected.status !== 400)
   throw new Error("API did not reject query parameters");
+const explore = await get("/explore");
+if (!explore.ok || !explore.headers.get("content-type")?.includes("text/html"))
+  throw new Error("Discovery page unavailable");
+const feed = await get("/api/discover");
+const discovery = await feed.json();
+if (
+  !feed.ok ||
+  discovery.version !== 1 ||
+  !Array.isArray(discovery.stories) ||
+  discovery.stories.length > 24
+)
+  throw new Error("Invalid discovery feed");
+if ((await get("/api/discover?url=http://127.0.0.1")).status !== 400)
+  throw new Error("Discovery accepted arbitrary URL input");
+console.log(`Discovery: ${discovery.stories.length} stories`);
 console.log(`Smoke checks passed: ${base.origin}`);
