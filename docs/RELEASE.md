@@ -11,14 +11,21 @@ Do not create the v1.0.0 tag until every required gate is complete.
 - [x] Verify local workerd full-stack routing, API/asset smoke checks and Wrangler packaging dry run.
 - [x] Complete independent code review and resolve material findings.
 - [x] Verify clean npm install and all gates on Node 24.
-- [ ] Validate GitHub Actions on the exact release source.
-- [ ] Deploy via existing Cloudflare Git integration only; verify production HTML/assets and JSON API.
-- [ ] Verify production desktop/mobile themes, service states and keyboard controls.
-- [ ] Synchronize final docs/progress with verified deployment and rollback record.
-- [ ] Create annotated v1.0.0 tag on the accepted release commit and push the tag.
+- [x] Validate GitHub Actions on the application release source.
+- [x] Deploy via existing Cloudflare Git integration only; verify production HTML/assets and JSON API.
+- [x] Verify production desktop/mobile themes, service states and keyboard controls.
+- [x] Synchronize final docs/progress with verified deployment and rollback record.
 
 Release notes: Live observations for three fixed public HTTPS endpoints, four-state service health, bounded server checks and cached snapshots, responsive accessible UI, development-only mock mode, automated QA and validation-only CI. No authentication, database, scheduled monitoring, historical uptime, paid services or custom-domain purchases.
 
-Verification evidence will be recorded below when the production gates complete. A public app does not become a stable release merely because the build passes.
+Publication action: after the final documentation commit passes CI and production verification, create and push the annotated `v1.0.0` tag. The remote tag is the publication record; do not move or overwrite it.
 
 Pre-deploy evidence: independent read-only review found no material issues; clean install on Node v24.22.0 passed all 42 tests, formatting, zero-warning lint, all TypeScript projects, Vite production build and Wrangler dry run. Public GitHub repository visibility verified.
+
+## Production acceptance evidence
+
+Application candidate: `01bc734a26bb9214f9a512d27144734d9a632f1b`. [Passing CI](https://github.com/hash-murali/pulse-watch/actions/runs/39281862609). Successful Cloudflare Git build: `328529cd-d8ff-42a4-bb86-d9194a2703b7`; Worker version `da7523a9-cbc4-4013-84d5-68179d562f1e`. Full validation and deployment completed on 2026-10-19 at 12:33 EDT.
+
+Production HTML/JS and status JSON are publicly reachable. All three services returned operational HTTP 200 during acceptance. Rejected arbitrary URL queries, API JSON 404s, CSP and nosniff headers verified. Browser QA at 1440×1000 and 390×844 verified layout, service rendering, search/filter/empty results, theme persistence and keyboard skip link; no console errors/warnings. Error, timeout and partial failure states are verified by the automated suite, without disrupting providers.
+
+The final release-record commit changes documentation only and is validated again before tag publication. Source and deployment rollback instructions are in [DEPLOYMENT.md](DEPLOYMENT.md). Future service availability is not guaranteed by these observations.

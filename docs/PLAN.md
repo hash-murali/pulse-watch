@@ -9,8 +9,8 @@ Architecture: preserve React/Vite and add a same-origin Worker API, a fixed HTTP
 - [x] B: Write failing tests for classification, timeout, unsafe destinations, concurrency, partial failures and API routing/cache; implement Worker and shared contract; verify; commit.
 - [x] C: Write failing integration tests for live loading/error/partial states; connect and validate API data; retain UI/theme; isolate local demo; verify; commit.
 - [x] D: Add lint/format/type checks, security/limits tests and docs; review dependencies and diffs; verify; commit.
-- [ ] E: Audit existing Git deployment, add validation-only Actions, dry-run Worker packaging, publish through existing connection, verify production; commit.
-- [ ] F: Final documentation and API guide; clean-install/full checks; desktop/mobile production verification; tag v1.0.0 only after all acceptance gates pass.
+- [x] E: Audit existing Git deployment, add validation-only Actions, dry-run Worker packaging, publish through existing connection, verify production; commit.
+- [x] F: Final documentation and API guide; clean-install/full checks; desktop/mobile production acceptance. Publish the annotated v1.0.0 tag only after this final release record passes CI and deployment verification.
 
 ## Files and interfaces
 
@@ -48,3 +48,12 @@ D verification: 42 tests pass; lint/type checks/build/format pass. Removed unuse
 E preparation: independent reviewer found no material issues. Clean install and all 42 tests/gates passed under Node v24.22.0. Validation-only GitHub Actions uses SHA-pinned official checkout/setup-node v6; public standard Linux runner, 10-minute timeout, no secrets/deployment. Cloudflare previews were already enabled with npx wrangler preview; existing production/preview settings remain unchanged so far.
 
 E diagnosis: candidate 4a79e74 passed Cloudflare build but preview deploy failed because the pre-existing `npx wrangler preview` command requires an explicit `previews` config block. Confirmed the exact error in build 608bfdab and current official Preview configuration documentation. Minimal fix: empty previews object; no resource bindings, secrets, or production routes added. Production v0.1 remained serving. Preview support exists on Workers Free.
+
+## Release acceptance — 2026-10-19
+
+- Candidate source `01bc734` passed [GitHub validation](https://github.com/hash-murali/pulse-watch/actions/runs/39281862609); all 42 tests, format/lint/strict type checks/build and Wrangler dry run passed again after resume.
+- Fast-forwarded master without rewriting history. The existing Cloudflare Git integration deployed the same candidate through `npm run check` and `npx wrangler deploy`.
+- Production build `328529cd-d8ff-42a4-bb86-d9194a2703b7` succeeded. Worker version `da7523a9-cbc4-4013-84d5-68179d562f1e`, deployed at 12:33 EDT. Only ASSETS is bound; Workers Free plan unchanged.
+- Production smoke checks passed: HTML and built JS, fresh JSON with three observations, JSON 404 for missing API routes and 400 for URL queries. CSP and nosniff verified. All three endpoints returned HTTP 200 during acceptance (point-in-time only).
+- Public browser QA passed at 1440×1000 desktop and 390×844 mobile: no page overflow, live table/status/timestamps, search, empty filter, persistent light/dark theme, keyboard skip link, and no console errors or warnings.
+- Final docs-only release record and changelog retain identical application source/assets. Its CI/build must pass before tagging; Git's annotated tag and remote ref are the authoritative publication record. No further paid infrastructure or scheduled jobs were enabled.

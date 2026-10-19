@@ -39,3 +39,7 @@ For immediate recovery, use Cloudflare → pulse-watch → Deployments → the p
 For lasting source rollback, revert the bad commit(s) on master with `git revert`, validate, then push through the existing integration. Never reset/force-push shared history. Reverting the entire v1 range intentionally restores the v0.1 mock dashboard and removes the live API; the pre-v1 build command must also return to `npm run build` because that source has no `check` script. Do not delete production resources or data.
 
 See [troubleshooting](TROUBLESHOOTING.md) and [$0 limits](LIMITS.md). Cloudflare credentials remain only in the existing platform connection; never put tokens in source, logs, GitHub Actions or chat.
+
+## v1 acceptance deployment
+
+On 2026-10-19, production build `328529cd-d8ff-42a4-bb86-d9194a2703b7` deployed application source `01bc734` successfully via the existing Git integration. Worker version: `da7523a9-cbc4-4013-84d5-68179d562f1e`. Public smoke/browser verification passed. This is an additional known-good rollback target for subsequent releases. The final documentation-only release record produces the same app assets and follows the same validation/deployment gate.
