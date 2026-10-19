@@ -5,7 +5,7 @@
 - **503/down/timeout for one service:** this is an observation from one location, not proof of a global outage. Other services should remain visible. Use the last-checked time and error label.
 - **Refresh disabled:** wait for the 60-second cooldown. There is no automatic polling; timestamps can become old on an open tab. A manual refresh can reuse a cached snapshot.
 - **API returns HTML:** verify the deployed commit contains `worker/index.ts` and `wrangler.jsonc`, `main` points at that Worker, and `assets.run_worker_first` includes `/api` and `/api/*`. A static-only deploy cannot serve the API.
-- **Build did not run:** check `pulse-watch` → Settings → Builds: repository hash-murali/pulse-watch, branch master, build `npm run build`, deploy `npx wrangler deploy`, root `/`. Inspect build logs; never create a duplicate deployment workflow to work around a transient failure.
+- **Build did not run:** check `pulse-watch` → Settings → Builds: repository hash-murali/pulse-watch, branch master, build `npm run check`, deploy `npx wrangler deploy`, root `/`. Inspect build logs; never create a duplicate deployment workflow to work around a transient failure.
 - **Cloudflare deployment rejects source:** inspect missing account authorization or build token scope through the existing connection. Never commit or paste tokens into code, logs or chat.
 - **Worker error 1102/Free quota exceeded:** inspect Metrics for CPU and request usage; keep the Free plan. Cache or simplify processing, reduce demand, or wait for quota reset. No paid fallback.
 - **Rollback required:** see [DEPLOYMENT.md](DEPLOYMENT.md). Prefer the prior successful Worker version for immediate recovery; use a source revert for lasting recovery.

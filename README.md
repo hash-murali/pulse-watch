@@ -61,7 +61,7 @@ The existing Cloudflare Git integration watches **master** in `hash-murali/pulse
 | Setting           | Value                                      |
 | ----------------- | ------------------------------------------ |
 | Platform / Worker | Cloudflare Workers / `pulse-watch`         |
-| Build             | `npm run build`                            |
+| Build             | `npm run check`                            |
 | Deploy            | `npx wrangler deploy`                      |
 | Root              | `/`                                        |
 | Assets            | `dist/`                                    |
