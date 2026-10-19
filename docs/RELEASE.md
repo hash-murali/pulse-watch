@@ -29,3 +29,15 @@ Application candidate: `01bc734a26bb9214f9a512d27144734d9a632f1b`. [Passing CI](
 Production HTML/JS and status JSON are publicly reachable. All three services returned operational HTTP 200 during acceptance. Rejected arbitrary URL queries, API JSON 404s, CSP and nosniff headers verified. Browser QA at 1440×1000 and 390×844 verified layout, service rendering, search/filter/empty results, theme persistence and keyboard skip link; no console errors/warnings. Error, timeout and partial failure states are verified by the automated suite, without disrupting providers.
 
 The final release-record commit changes documentation only and is validated again before tag publication. Source and deployment rollback instructions are in [DEPLOYMENT.md](DEPLOYMENT.md). Future service availability is not guaranteed by these observations.
+
+## v1.1.0 PulsePlay acceptance
+
+- [x] Preserve monitor and existing Worker; add discovery at `/explore`.
+- [x] Live fixed-provider search/feed, safe links, bounded JSON/time/concurrency/cache and burst handling.
+- [x] Local saved stories, topic shortcuts, random spotlight, responsive themes and reduced-motion loading.
+- [x] Clean Node24 install, 61 tests, formatting/lint/strict types/build and packaging dry run.
+- [x] Independent review resolved; large multilingual response regression added.
+- [x] Preview and production Git builds/CI succeeded; smoke and public desktop/mobile browser checks passed.
+- [x] Privacy, API, limitations, architecture, deployment and troubleshooting docs updated.
+
+Application source `00f51d9`; detailed evidence is in [PLAN.md](PLAN.md). The existing v1.0.0 tag remains unchanged. No v1.1 tag is required for this feature delivery.
