@@ -1,0 +1,32 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Credentials and local secrets
+secrets/
+.secrets/
+.aws/
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+
+# Logs, caches, and temporary editor files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+.tmp/
+tmp/
+coverage/
+.vscode/
+.idea/
